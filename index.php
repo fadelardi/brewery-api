@@ -10,11 +10,21 @@ include 'bootstrap.php';
 <h3>Distilled SCH Beer App</h3>
 
 <div>
-	<div>
-		<span><?=$randomBeer['data']['name']?></span>
-		<div><img src="<?=$randomBeer['data']['labels']['icon']?>" /></div>
-	</div>
-	<div><?=$randomBeer['data']['description']?></div>
+	<?php
+	if ($randomBeer['status'] == 'failure') {
+		?>
+		<div>The random beer of the day could not be loaded!</div>
+		<?php
+	} else {
+		?>
+		<div>
+			<span><?=$randomBeer['data']['name']?></span>
+			<div><img src="<?=$randomBeer['data']['labels']['icon']?>" /></div>
+		</div>
+		<div><?=$randomBeer['data']['description']?></div>
+		<?php 
+	}
+	?>
 	<div>
 		<form method="get" action="">
 			<input type="submit" name="action" value="Another Beer" />
@@ -22,6 +32,7 @@ include 'bootstrap.php';
 			<input type="hidden" name="bid" value="<?=$bid?>" />
 		</form>
 	</div>
+
 </div>
 
 <h3>Search</h3>

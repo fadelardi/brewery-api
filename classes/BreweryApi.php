@@ -4,6 +4,8 @@ include 'Api.php';
 class BreweryApi extends Api
 {
 	protected $baseUrl = 'http://api.brewerydb.com/v2/';
+	protected $randomBeerRetryCount = 0;
+	const MAX_RETRY_NUMBER = 15;
 	const KEY = 'e5ec2463c715bece8e5d129eb14c41e6';
 	const RANDOM_BEER_ENDPOINT = 'beer/random';
 	const BREWERY_BEERS_ENDPOINT = 'brewery/:bid/beers';
@@ -11,7 +13,22 @@ class BreweryApi extends Api
 
 	public function getRandomBeer()
 	{
-		return $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey() . '&withBreweries=Y');
+		if ($this->randomBeerRetryCount > self::MAX_RETRY_NUMBER) {
+			$this->randomBeerRetryCount = 0;
+			return json_encode(['status' => 'failure']);
+		}
+
+		$res = $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey() . '&withBreweries=Y');
+		$res = json_decode($res, true);
+		if ($res && $res['status'] == 'success') {
+			$data = $res['data'];
+			if (!isset($data['description']) || empty($data['description']) || !isset($data['labels']['icon']) || empty($data['labels']['icon'])) {
+				$this->randomBeerRetryCount++;
+				return $this->getRandomBeer();
+			}
+		}
+
+		return json_encode($res);
 	}
 
 	public function getRandomBeerFromBrewery($bId) 
