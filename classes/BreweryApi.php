@@ -11,7 +11,7 @@ class BreweryApi extends Api
 
 	public function getRandomBeer()
 	{
-		return $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey());
+		return $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey() . '&withBreweries=Y');
 	}
 
 	public function getRandomBeerFromBrewery($bId) 
