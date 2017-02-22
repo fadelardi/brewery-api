@@ -45,13 +45,12 @@ class BreweryApi extends Api
 
 	protected function validQuery($query)
 	{
-		// TODO
-		return true;
+		return preg_match('/^[A-Za-z0-9-\s]+$/', $query);
 	}
 
 	protected function validType($type) {
-		// TODO
-		return true;
+		$validTypes = ['beer', 'brewery'];
+		return in_array($type, $validTypes);
 	}
 
 	private function getKey() {
