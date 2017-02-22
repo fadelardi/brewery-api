@@ -3,8 +3,9 @@ include 'classes/BreweryApi.php';
 $api = new BreweryApi();
 
 $results = false;
+$action = isset($_GET['action']) ? $_GET['action'] : false;
 
-switch($_GET['action']) {
+switch($action) {
 	case 'More from this Brewery':
 		// $randomBeer = ['data' => ['name' => 'kek', 'description' => 'topkek'] ];
 		$randomBeer = json_decode($api->getRandomBeerFromBrewery($_GET['bid']), true);
