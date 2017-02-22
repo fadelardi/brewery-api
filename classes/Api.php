@@ -1,19 +1,19 @@
 <?php
 class Api
 {
-	protected $url;
+	protected $baseUrl;
 
 	public function __construct()
 	{
-		if (empty($this->url)) {
+		if (empty($this->baseUrl)) {
 			throw new Exception('An URL must be defined for your API');
 		}
 	}
 
-	public function get()
+	public function get($endpoint)
 	{
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->url);
+		curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $endpoint);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		$output = curl_exec($ch);
 		curl_close($ch);
