@@ -7,6 +7,7 @@ class BreweryApi extends Api
 	const KEY = 'e5ec2463c715bece8e5d129eb14c41e6';
 	const RANDOM_BEER_ENDPOINT = 'beer/random';
 	const BREWERY_BEERS_ENDPOINT = 'brewery/:bid/beers';
+	const SEARCH_ENDPOINT = 'search';
 
 	public function getRandomBeer()
 	{
@@ -33,9 +34,24 @@ class BreweryApi extends Api
 		}
 	}
 
-	public function search($query, $type='')
+	public function search($query, $type)
 	{
+		if ($this->validQuery($query) && $this->validType($type)) {
+			return $this->get(self::SEARCH_ENDPOINT . $this->getKey() . '&q=' . urlencode($query) . '&type=' . urlencode($type));
+		}
 
+		return json_encode(['status' => 'failure']);
+	}
+
+	protected function validQuery($query)
+	{
+		// TODO
+		return true;
+	}
+
+	protected function validType($type) {
+		// TODO
+		return true;
 	}
 
 	private function getKey() {
