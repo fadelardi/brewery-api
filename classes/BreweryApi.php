@@ -43,12 +43,12 @@ class BreweryApi extends Api
 		return json_encode(['status' => 'failure']);
 	}
 
-	protected function validQuery($query)
+	private function validQuery($query)
 	{
-		return preg_match('/^[A-Za-z0-9-\s]+$/', $query);
+		return preg_match('/^[A-Za-z0-9-\s]+$/', $query) === 1;
 	}
 
-	protected function validType($type) {
+	private function validType($type) {
 		$validTypes = ['beer', 'brewery'];
 		return in_array($type, $validTypes);
 	}
