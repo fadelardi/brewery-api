@@ -20,18 +20,18 @@ class BreweryApi extends Api
 		$allBeersFromBrewer = json_decode($allBeersFromBrewer, true);
 		if ($allBeersFromBrewer && $allBeersFromBrewer['status'] == 'success') {
 			$totalBeersCount = count($allBeersFromBrewer['data']);
-			if ($totalBeersCount <= 0) {
-				return json_encode(['status => failure']);
+			if ($totalBeersCount > 0) {
+				$randomBeer = rand(0, $totalBeersCount -1);
+				$randomBeerResponse = [
+					"status" => "success",
+					"data" => $allBeersFromBrewer['data'][$randomBeer]
+				];
+
+				return json_encode($randomBeerResponse);
 			}
-			$randomBeer = rand(0, $totalBeersCount -1);
-			$randomBeerResponse = [
-				"status" => "success",
-				"data" => $allBeersFromBrewer['data'][$randomBeer]
-			];
-			return json_encode($randomBeerResponse);
-		} else {
-			return json_encode(['status' => 'failure']);
-		}
+		} 
+		
+		return json_encode(['status' => 'failure']);
 	}
 
 	public function search($query, $type)
