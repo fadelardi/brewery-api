@@ -10,31 +10,43 @@ include 'bootstrap.php';
 	<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
+<script src="static/beer.js"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+	var randomBtn = document.getElementById('action_random');
+	var breweryBtn = document.getElementById('action_brewery');
+
+	randomBtn.onclick = function(e) {
+		e.preventDefault();
+		Beer.getRandom();
+	}
+});
+</script>
 
 <div class="container">
 <h3>Distilled SCH Beer App</h3>
-	<?php
-	if (!isset($randomBeer['status']) || $randomBeer['status'] == 'failure') {
-		?>
-		<div class="col-md-10">
-			<b class="bg-primary">The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b>
-		</div>
+	<div class="col-md-10" id="random_beer">
 		<?php
-	} else {
+		if (!isset($randomBeer['status']) || $randomBeer['status'] == 'failure') {
+			?>
+			<b>The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b>
+			<?php
+		} else {
+			?>
+			<div class="col-md-12"><b><?=$randomBeer['data']['name']?></b></div>
+			<div class="col-md-2">
+				<div><img src="<?=$randomBeer['data']['labels']['icon']?>" class="img-thumbnail" /></div>
+			</div>
+			<div class="col-md-10"><?=$randomBeer['data']['description']?></div>
+			<?php 
+		}
 		?>
-		<div class="col-md-12"><b><?=$randomBeer['data']['name']?></b></div>
-		<div class="col-md-2">
-			<div><img src="<?=$randomBeer['data']['labels']['icon']?>" class="img-thumbnail" /></div>
-		</div>
-		<div class="col-md-8"><?=$randomBeer['data']['description']?></div>
-		<?php 
-	}
-	?>
+	</div>
 	<div class="col-md-2">
 		<form method="get" action="">
-			<input type="submit" name="action" value="Another Beer" class="btn btn-primary btn-block" />
-			<input type="submit" name="action" value="More from Brewery" class="btn btn-primary btn-block" />
-			<input type="hidden" name="bid" value="<?=$bid?>" />
+			<input type="button" name="action" id="action_random" value="Another Beer" class="btn btn-primary btn-block" />
+			<input type="submit" name="action" id="action_brewery" value="More from Brewery" class="btn btn-primary btn-block" />
+			<input type="hidden" name="bid" id="bid" value="<?=$bid?>" />
 		</form>
 	</div>
 
@@ -43,7 +55,7 @@ include 'bootstrap.php';
 <form method="get" action="">
 <div class="container">
 	<h3>Search</h3>
-	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" value="<?=$_GET['query']?>" required /></div>
+	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" value="<?=$query?>" required /></div>
 	<div class="col-md-4">
 		<div>
 		<label class="radio-inline">
