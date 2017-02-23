@@ -67,7 +67,7 @@ if ($results) {
 			foreach($results['data'] as $res) {
 				?>
 				<div>
-					<div class="col-md-2"><?=isset($res['labels']['icon']) ? "<img src=\"$res['labels']['icon']\" class=\"img-thumbnail\" />" : 'No image'?></div>
+					<div class="col-md-2"><?=isset($res['labels']['icon']) ? '<img src="' . $res['labels']['icon'] .'" class="img-thumbnail" />' : 'No image'?></div>
 					<div class="col-md-10">
 						<div><?=$res['name']?></div>
 						<div><?=isset($res['description']) ? $res['description'] : 'No description available'?></div>
