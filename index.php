@@ -1,6 +1,3 @@
-<?php
-include 'bootstrap.php';
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,37 +17,38 @@ document.addEventListener('DOMContentLoaded', function() {
 		e.preventDefault();
 		Beer.getRandom();
 	}
+
+	breweryBtn.onclick = function(e) {
+		e.preventDefault();
+		Beer.getRandomFromBrewery();
+	}
+
+	Beer.getRandom();
 });
 </script>
 
 <div class="container">
 <h3>Distilled SCH Beer App</h3>
-	<div class="col-md-10" id="random_beer">
-		<?php
-		if (!isset($randomBeer['status']) || $randomBeer['status'] == 'failure') {
-			?>
-			<b>The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b>
-			<?php
-		} else {
-			?>
-			<div class="col-md-12"><b><?=$randomBeer['data']['name']?></b></div>
-			<div class="col-md-2">
-				<div><img src="<?=$randomBeer['data']['labels']['icon']?>" class="img-thumbnail" /></div>
-			</div>
-			<div class="col-md-10"><?=$randomBeer['data']['description']?></div>
-			<?php 
-		}
-		?>
-	</div>
+	<div class="col-md-10" id="random_beer"></div>
 	<div class="col-md-2">
 		<form method="get" action="">
 			<input type="button" name="action" id="action_random" value="Another Beer" class="btn btn-primary btn-block" />
-			<input type="submit" name="action" id="action_brewery" value="More from Brewery" class="btn btn-primary btn-block" />
-			<input type="hidden" name="bid" id="bid" value="<?=$bid?>" />
+			<input type="button" name="action" id="action_brewery" value="More from Brewery" class="btn btn-primary btn-block" />
 		</form>
 	</div>
 
 </div>
+<?php
+include 'autoload.php';
+
+$results = false;
+$query = isset($_GET['query']) ? $_GET['query'] : null;
+if ($query) {
+	$api = new BreweryApi();
+	$results = json_decode($api->search($query, $_GET['type']), true);
+}
+
+?>
 
 <form method="get" action="">
 <div class="container">

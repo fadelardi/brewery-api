@@ -1,20 +1,25 @@
 var Beer = {
 	ajaxUrl : 'ajax.php',
-	getRandom : function() {
+	breweryId : 0,
+	get : function(url) {
 		var self = this;
 		var randomBeerDiv = document.getElementById('random_beer');
-		randomBeerDiv.innerHTML = '<div class="col-md-12 text-center"><img src="static/img/spinner.gif" /></div>';
 		var onSuccess = function(data) {
+			self.setBreweryId(data['breweries']);
 			randomBeerDiv.innerHTML = self.getBeerDiv(data);
 		}
 		var onFail = function() {
-			randomBeerDiv.innerHTML = '<b>The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b'; 
+			randomBeerDiv.innerHTML = '<b>The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b>'; 
 		}
 		
-		this.makeAjaxCall(onSuccess, onFail);	
+		randomBeerDiv.innerHTML = '<div class="col-md-12 text-center"><img src="static/img/spinner.gif" /></div>';
+		this.makeAjaxCall(url, onSuccess, onFail);	
 	},
-	getRandomFromBrewery : function(bid) {
-
+	getRandom : function() {
+		this.get(this.ajaxUrl + '?type=beer');
+	},
+	getRandomFromBrewery : function() {
+		this.get(this.ajaxUrl + '?type=brewery&bid=' + this.breweryId);
 	},
 	getBeerDiv : function(data) {
 		var div = '';
@@ -25,7 +30,7 @@ var Beer = {
 		div += '<div class="col-md-10">' + data['description'] + '</div>';
 		return div;
 	},
-	makeAjaxCall : function(success, fail) {
+	makeAjaxCall : function(url, success, fail) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState != 4 || xhr.status != 200) return;
@@ -36,8 +41,13 @@ var Beer = {
 				fail(); 
 			}
 		}
-		xhr.open('GET', this.ajaxUrl);
+		xhr.open('GET', url);
 		xhr.send();	
+	},
+	setBreweryId : function(idArray) {
+		if (typeof idArray !== 'undefined') {
+			this.breweryId = idArray[0]['id'];
+		}
 	}
 }
 
