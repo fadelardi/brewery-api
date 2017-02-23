@@ -16,7 +16,7 @@ class BreweryApi extends Api
 			return json_encode(['status' => 'failure']);
 		}
 
-		$res = $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey() . '&withBreweries=Y');
+		$res = $this->get(self::RANDOM_BEER_ENDPOINT . $this->getKey() . '&withBreweries=Y&hasLabels=Y');
 		$res = json_decode($res, true);
 		if ($res && $res['status'] == 'success') {
 			$data = $res['data'];

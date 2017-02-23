@@ -7,15 +7,18 @@ include 'bootstrap.php';
 	<title>Beer App</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 
 <div class="container">
 <h3>Distilled SCH Beer App</h3>
 	<?php
-	if ($randomBeer['status'] == 'failure') {
+	if (!isset($randomBeer['status']) || $randomBeer['status'] == 'failure') {
 		?>
-		<div>The random beer of the day could not be loaded!</div>
+		<div class="col-md-10">
+			<b class="bg-primary">The random beer of the day could not be loaded. The script gave up trying to find an image that met the criteria, or the API is taking no more requests for the day.</b>
+		</div>
 		<?php
 	} else {
 		?>
@@ -40,14 +43,16 @@ include 'bootstrap.php';
 <form method="get" action="">
 <div class="container">
 	<h3>Search</h3>
-	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" required /></div>
+	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" value="<?=$_GET['query']?>" required /></div>
 	<div class="col-md-4">
+		<div>
 		<label class="radio-inline">
 			<input type="radio" name="type" value="beer" <?=!isset($_GET['type']) || $_GET['type'] == 'beer' ? 'checked' : ''?>> Beer 
 		</label>
 		<label class="radio-inline">
 			<input type="radio" name="type" value="brewery" <?=isset($_GET['type']) && $_GET['type'] == 'brewery' ? 'checked' : ''?>> Brewery
 		</label>
+		</div>
 	</div>
 	<div class="col-md-2"><input type="submit" name="action" value="Search" class="btn btn-primary" /></div>
 </div>
@@ -66,8 +71,10 @@ if ($results) {
 		} else {
 			foreach($results['data'] as $res) {
 				?>
-				<div class="col-md-12">
-					<div class="col-md-2"><?=isset($res['labels']['icon']) ? '<img src="' . $res['labels']['icon'] .'" class="img-thumbnail" />' : '<div class="img-thumbnail"></div>'?></div>
+				<div class="col-md-12 result-box">
+					<div class="col-md-2">
+						<?=isset($res['labels']['icon']) ? '<img src="' . $res['labels']['icon'] .'" class="img-thumbnail" />' : '<div class="img-thumbnail fake-thumbnail"></div>'?>	
+					</div>
 					<div class="col-md-10">
 						<div><?=$res['name']?></div>
 						<div><?=isset($res['description']) ? $res['description'] : 'No description available'?></div>

@@ -1,0 +1,10 @@
+.fake-thumbnail {
+	height: 74px;
+	width: 74px;
+}
+
+.result-box {
+	border-bottom: 1px dotted black;
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
