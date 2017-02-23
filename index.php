@@ -5,11 +5,13 @@ include 'bootstrap.php';
 <html>
 <head>
 	<title>Beer App</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <body>
-<h3>Distilled SCH Beer App</h3>
 
-<div>
+<div class="container">
+<h3>Distilled SCH Beer App</h3>
 	<?php
 	if ($randomBeer['status'] == 'failure') {
 		?>
@@ -17,50 +19,59 @@ include 'bootstrap.php';
 		<?php
 	} else {
 		?>
-		<div>
-			<span><?=$randomBeer['data']['name']?></span>
-			<div><img src="<?=$randomBeer['data']['labels']['icon']?>" /></div>
+		<div class="col-md-2">
+			<div><b><?=$randomBeer['data']['name']?></b></div>
+			<div><img src="<?=$randomBeer['data']['labels']['icon']?>" class="img-thumbnail" /></div>
 		</div>
-		<div><?=$randomBeer['data']['description']?></div>
+		<div class="col-md-8"><?=$randomBeer['data']['description']?></div>
 		<?php 
 	}
 	?>
-	<div>
+	<div class="col-md-2">
 		<form method="get" action="">
-			<input type="submit" name="action" value="Another Beer" />
-			<input type="submit" name="action" value="More from this Brewery" />
+			<input type="submit" name="action" value="Another Beer" class="btn btn-primary btn-block" />
+			<input type="submit" name="action" value="More from this Brewery" class="btn btn-primary btn-block" />
 			<input type="hidden" name="bid" value="<?=$bid?>" />
 		</form>
 	</div>
 
 </div>
 
-<h3>Search</h3>
 <form method="get" action="">
-<div>
-	<div><input type="text" name="query" placeholder="Search" required /></div>
-	<div><input type="radio" name="type" value="beer" checked="checked" /> Beer <input type="radio" name="type" value="brewery" /> Brewery</div>
-	<div><input type="submit" name="action" value="Search" /></div>
+<div class="container">
+	<h3>Search</h3>
+	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" required /></div>
+	<div class="col-md-4">
+		<label class="radio-inline">
+			<input type="radio" name="type" value="beer" checked="checked"> Beer 
+		</label>
+		<label class="radio-inline">
+			<input type="radio" name="type" value="brewery"> Brewery
+		</label>
+	</div>
+	<div class="col-md-2"><input type="submit" name="action" value="Search" class="btn btn-primary" /></div>
 </div>
 </form>
 
 <?php
 if ($results) { 
 	?>
-	<h3>Search Results</h3>
-	<div>
+	<div class="container">
+		<h3>Search Results</h3>
 		<?php
 		if ($results['status'] == 'failure' || !count($results['data'])) {
 			?>
-			<div>No results were found.</div>
+			<div class="col-md-12">No results were found.</div>
 			<?php
 		} else {
 			foreach($results['data'] as $res) {
 				?>
 				<div>
-					<div><?=isset($res['labels']['icon']) ? $res['labels']['icon'] : 'No image available'?></div>
-					<div><?=$res['name']?></div>
-					<div><?=isset($res['description']) ? $res['description'] : 'No description available'?></div>
+					<div class="col-md-2"><?=isset($res['labels']['icon']) ? "<img src=\"$res['labels']['icon']\" class=\"img-thumbnail\" />" : 'No image'?></div>
+					<div class="col-md-10">
+						<div><?=$res['name']?></div>
+						<div><?=isset($res['description']) ? $res['description'] : 'No description available'?></div>
+					</div>
 				</div>
 				<?php			
 			}
