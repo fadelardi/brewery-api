@@ -1,4 +1,7 @@
 <?php
+/*
+	Very simple PHP file to emulate an API 
+*/
 header('Content-Type: application/json');
 include 'autoload.php';
 $api = new BreweryApi();

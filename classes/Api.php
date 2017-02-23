@@ -1,4 +1,7 @@
 <?php
+/*
+	Base API class. A wrapper for curl as it stands.
+*/
 class Api
 {
 	protected $baseUrl;
