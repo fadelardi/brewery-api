@@ -25,6 +25,21 @@ class BreweryApiTest extends TestCase
 		return $method;
 	}
 
+	public function testSanitizeBeerArray() {
+		$method = self::getMethod('sanitizeBeerArray');
+		$api = new BreweryApi();
+		$beerArray = [
+			['name' => 'no desc'],
+			['name' => 'no img', 'description' => 'Some desc'],
+			['name' => 'Valid Beer Array', 'description' => 'Test', 'labels' => ['icon' => 'img.jpg']],
+			['labels' => ['nope']]
+		];
+
+		$sanitizedArray = $method->invokeArgs($api, [$beerArray]);
+		$this->assertEquals(count($sanitizedArray), 1);
+		$this->assertEquals($sanitizedArray, [$beerArray[2]]);
+	}
+
 	public function testValidType() {
 		$method = self::getMethod('validType');
 		$api = new BreweryApi();

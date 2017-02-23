@@ -4,7 +4,8 @@ class BreweryApi extends Api
 	protected $baseUrl = 'http://api.brewerydb.com/v2/';
 	protected $randomBeerRetryCount = 0;
 	const MAX_RETRY_NUMBER = 15;
-	const KEY = 'e5ec2463c715bece8e5d129eb14c41e6';
+	const KEY = 'e5ec2463c715bece8e5d129eb14c41e6'; // key #1
+	// const KEY = 'eedf1c95079871724da82d9d72e83793'; // key #2
 	const RANDOM_BEER_ENDPOINT = 'beer/random';
 	const BREWERY_BEERS_ENDPOINT = 'brewery/:bid/beers';
 	const SEARCH_ENDPOINT = 'search';
@@ -31,15 +32,16 @@ class BreweryApi extends Api
 
 	public function getRandomBeerFromBrewery($bId) 
 	{
-		$allBeersFromBrewer = $this->get(str_replace(':bid', $bId, self::BREWERY_BEERS_ENDPOINT) . $this->getKey());
-		$allBeersFromBrewer = json_decode($allBeersFromBrewer, true);
-		if ($allBeersFromBrewer && $allBeersFromBrewer['status'] == 'success') {
-			$totalBeersCount = count($allBeersFromBrewer['data']);
+		$allBeersFromBrewery = $this->get(str_replace(':bid', $bId, self::BREWERY_BEERS_ENDPOINT) . $this->getKey());
+		$allBeersFromBrewery = json_decode($allBeersFromBrewery, true);
+		if ($allBeersFromBrewery && $allBeersFromBrewery['status'] == 'success') {
+			$allBeersFromBrewery['data'] = $this->sanitizeBeerArray($allBeersFromBrewery['data']);
+			$totalBeersCount = count($allBeersFromBrewery['data']);
 			if ($totalBeersCount > 0) {
 				$randomBeer = rand(0, $totalBeersCount -1);
 				$randomBeerResponse = [
 					"status" => "success",
-					"data" => $allBeersFromBrewer['data'][$randomBeer]
+					"data" => $allBeersFromBrewery['data'][$randomBeer]
 				];
 
 				return json_encode($randomBeerResponse);
@@ -56,6 +58,17 @@ class BreweryApi extends Api
 		}
 
 		return json_encode(['status' => 'failure']);
+	}
+
+	private function sanitizeBeerArray($arr) 
+	{
+		if (!is_array($arr)) return [];
+		foreach ($arr as $key => $beer) {
+			if (!isset($beer['description']) || empty($beer['description']) || !isset($beer['labels']['icon']) || empty($beer['labels']['icon'])) {
+				unset($arr[$key]);
+			}
+		}
+		return array_values($arr);
 	}
 
 	private function validQuery($query)
