@@ -1,10 +1,13 @@
 <?php
-include 'classes/BreweryApi.php';
+spl_autoload_register(function ($class) {
+    include 'classes/' . $class . '.php';
+});
+
 $api = new BreweryApi();
 
 $results = false;
 $action = isset($_GET['action']) ? $_GET['action'] : false;
-
+die('topkek');
 switch($action) {
 	case 'More from this Brewery':
 		// $randomBeer = ['data' => ['name' => 'kek', 'description' => 'topkek'] ];

@@ -1,6 +1,4 @@
 <?php 
-include 'Api.php';
-
 class BreweryApi extends Api
 {
 	protected $baseUrl = 'http://api.brewerydb.com/v2/';
