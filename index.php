@@ -19,8 +19,8 @@ include 'bootstrap.php';
 		<?php
 	} else {
 		?>
+		<div class="col-md-12"><b><?=$randomBeer['data']['name']?></b></div>
 		<div class="col-md-2">
-			<div><b><?=$randomBeer['data']['name']?></b></div>
 			<div><img src="<?=$randomBeer['data']['labels']['icon']?>" class="img-thumbnail" /></div>
 		</div>
 		<div class="col-md-8"><?=$randomBeer['data']['description']?></div>
@@ -30,7 +30,7 @@ include 'bootstrap.php';
 	<div class="col-md-2">
 		<form method="get" action="">
 			<input type="submit" name="action" value="Another Beer" class="btn btn-primary btn-block" />
-			<input type="submit" name="action" value="More from this Brewery" class="btn btn-primary btn-block" />
+			<input type="submit" name="action" value="More from Brewery" class="btn btn-primary btn-block" />
 			<input type="hidden" name="bid" value="<?=$bid?>" />
 		</form>
 	</div>
@@ -43,10 +43,10 @@ include 'bootstrap.php';
 	<div class="col-md-6"><input type="text" name="query" placeholder="Search" class="form-control" required /></div>
 	<div class="col-md-4">
 		<label class="radio-inline">
-			<input type="radio" name="type" value="beer" checked="checked"> Beer 
+			<input type="radio" name="type" value="beer" <?=!isset($_GET['type']) || $_GET['type'] == 'beer' ? 'checked' : ''?>> Beer 
 		</label>
 		<label class="radio-inline">
-			<input type="radio" name="type" value="brewery"> Brewery
+			<input type="radio" name="type" value="brewery" <?=isset($_GET['type']) && $_GET['type'] == 'brewery' ? 'checked' : ''?>> Brewery
 		</label>
 	</div>
 	<div class="col-md-2"><input type="submit" name="action" value="Search" class="btn btn-primary" /></div>
@@ -66,8 +66,8 @@ if ($results) {
 		} else {
 			foreach($results['data'] as $res) {
 				?>
-				<div>
-					<div class="col-md-2"><?=isset($res['labels']['icon']) ? '<img src="' . $res['labels']['icon'] .'" class="img-thumbnail" />' : 'No image'?></div>
+				<div class="col-md-12">
+					<div class="col-md-2"><?=isset($res['labels']['icon']) ? '<img src="' . $res['labels']['icon'] .'" class="img-thumbnail" />' : '<div class="img-thumbnail"></div>'?></div>
 					<div class="col-md-10">
 						<div><?=$res['name']?></div>
 						<div><?=isset($res['description']) ? $res['description'] : 'No description available'?></div>
