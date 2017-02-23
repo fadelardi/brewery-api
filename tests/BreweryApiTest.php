@@ -1,8 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-include('classes/BreweryApi.php');
-
 class BreweryApiTest extends TestCase
 {
 	const VALID_TYPES = ['beer', 'brewery'];
@@ -17,7 +15,7 @@ class BreweryApiTest extends TestCase
 	/*
 		According to theory one should not test private/protected methods, and 
 		should instead test these method through publicly exposed methods. 
-		At the end you'll find a test that adheres to this school of 
+		At the end you'll find "testSearch" that adheres to this school of 
 		thought. The following tests do quite the opposite. 
 	*/
 	protected static function getMethod($name) {

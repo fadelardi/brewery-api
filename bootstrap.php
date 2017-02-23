@@ -1,8 +1,6 @@
 <?php
 session_start();
-spl_autoload_register(function ($class) {
-    include 'classes/' . $class . '.php';
-});
+include 'autoload.php';
 
 $api = new BreweryApi();
 
